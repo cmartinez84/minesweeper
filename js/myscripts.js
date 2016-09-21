@@ -7,9 +7,9 @@
 //     if blank, tile is revealed to be blank, and tiles in each direction (H V D) are revealed if they are numbers of blank (recursive function?);
 
 function Tile(i){
-    this.underside = i;
+    this.underside = "blank";
     this.index =i;
-    this.adjacentBombs;
+    // this.adjacentBombs = 0;
 }
 function Board(){
     this.board = [];
@@ -24,35 +24,43 @@ Board.prototype.makeBoard = function(size){
     }
     this.size = size;
 }
-Board.prototype.makeBombs  = function(){
+
+Board.prototype.makeBombs  = function(numberOfBombs){
     //this will take a paramter in the future to determine how  many bombs are in a  game, ie difficulty
-    var randNum = Math.floor((Math.random() * this.board.length) + 1);
-    this.board[randNum].underside = "bomb";
+    for(var i =1; i<=numberOfBombs; i++){
+        var randNum = Math.floor((Math.random() * this.board.length) + 1);
+        this.board[randNum].underside = "bomb";
+        var numbersAroundBombs = this.adjacentArray(randNum);
+         numbersAroundBombs.forEach(function(number){
+             if(number >=0 && number < this.size *this.size){
+                this.board[number-1].underside = 1;
+             }
+         }, this)
+    }
   };
 
-Board.prototype.makeNumbers =  function(){
-    var size = parseInt(this.size);
-    var numberPlaces = [];
-    for(var i=0; i < this.board.length; i++){
-        if(this.board[i].underside === "bomb"){
-            var index = parseInt(this.board[i].index);
-            if(index % size !== 0){
-                numberPlaces.push(index-(size+1));
-                numberPlaces.push(index+1);
-                numberPlaces.push(index+size+1);
-            }
-            if((index-1) % size !== 0 ){
-                numberPlaces.push(index-(size-1));
-                numberPlaces.push(index-1);
-                numberPlaces.push(index+size-1);
-            }
-                numberPlaces.push(index+size);
-                numberPlaces.push(index-size);
 
-        }
+//return array of adjacent tiles numbers, some invalid
+
+    Board.prototype.adjacentArray =  function(tileNumber){
+        var size = parseInt(this.size);
+        var numberPlaces = [];
+            numberPlaces.push(tileNumber+size);
+            numberPlaces.push(tileNumber-size);
+            if(tileNumber % size !== 0){
+                numberPlaces.push(tileNumber-size+1);
+                numberPlaces.push(tileNumber+1);
+                numberPlaces.push(tileNumber+size+1);
+            }
+            if((tileNumber-1) % size !== 0 ){
+                numberPlaces.push(tileNumber-size-1);
+                numberPlaces.push(tileNumber-1);
+                numberPlaces.push(tileNumber+size-1);
+            }
+        console.log(numberPlaces);
+        return numberPlaces;
     }
-    console.log(numberPlaces);
-    };
+
 
 
 
@@ -62,10 +70,8 @@ $(function(){
         var newBoard = new Board();
         var inputSize = $("#input").val();
         newBoard.makeBoard(inputSize);
-        newBoard.makeBombs();
-        newBoard.makeNumbers();
-        newBoard.num
-        console.log(newBoard);
+        newBoard.makeBombs(1);
+        // newBoard.adjacentArray(13);
         newBoard.board.forEach(function(i){
             $(".board").append("<p class='square'> "+i.underside+" </p>");
         });
