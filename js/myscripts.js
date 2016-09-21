@@ -46,7 +46,9 @@ Board.prototype.makeBombs  = function(numberOfBombs){
 //return array of adjacent tiles numbers, some invalid
     Board.prototype.adjacentArray =  function(tileNumber){
         var size = parseInt(this.size);
+        var area = this.area;
         var numberPlaces = [];
+        var alteredPlaces = [];
             numberPlaces.push(tileNumber+size);
             numberPlaces.push(tileNumber-size);
             if(tileNumber % size !== 0){
@@ -60,14 +62,12 @@ Board.prototype.makeBombs  = function(numberOfBombs){
                 numberPlaces.push(tileNumber+size-1);
             }
             for(var i = 0; i < numberPlaces.length; i++){
-                if((numberPlaces[i] >= this.area) ||(numberPlaces[i] < 0)){
-                    numberPlaces.splice(i,1);
+                if((numberPlaces[i] <= area) && (numberPlaces[i] > 0)){
+                    alteredPlaces.push(numberPlaces[i]);
                 }
-            }
-            return numberPlaces;
         };
-        // console.log(numberPlaces);
-
+        console.log(alteredPlaces);
+}
 
     //changes tile # status to revealed: true as well as those for all others who have not been revealed. should reveal whole board
     // Board.prototype.reveal = function(input){
