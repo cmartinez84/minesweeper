@@ -7,7 +7,7 @@
 //     if blank, tile is revealed to be blank, and tiles in each direction (H V D) are revealed if they are numbers of blank (recursive function?);
 
 function Tile(i){
-    this.underside = "blank";
+    this.underside = 0;
     this.index =i;
     // this.adjacentBombs = 0;
 }
@@ -29,11 +29,11 @@ Board.prototype.makeBombs  = function(numberOfBombs){
     //this will take a paramter in the future to determine how  many bombs are in a  game, ie difficulty
     for(var i =1; i<=numberOfBombs; i++){
         var randNum = Math.floor((Math.random() * this.board.length) + 1);
-        this.board[randNum].underside = "bomb";
+        this.board[randNum-1].underside = "bomb";
         var numbersAroundBombs = this.adjacentArray(randNum);
          numbersAroundBombs.forEach(function(number){
-             if(number >=0 && number < this.size *this.size){
-                this.board[number-1].underside = 1;
+             if(number >=0 && number <=( this.size *this.size)){
+                this.board[number-1].underside += 1;
              }
          }, this)
     }
@@ -71,7 +71,6 @@ $(function(){
         var inputSize = $("#input").val();
         newBoard.makeBoard(inputSize);
         newBoard.makeBombs(1);
-        // newBoard.adjacentArray(13);
         newBoard.board.forEach(function(i){
             $(".board").append("<p class='square'> "+i.underside+" </p>");
         });
