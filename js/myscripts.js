@@ -9,11 +9,13 @@
 function Tile(i){
     this.underside = 0;
     this.index =i;
+    this.revealed ="false";
     // this.adjacentBombs = 0;
 }
 function Board(){
     this.board = [];
     this.size;
+    this.area;
 }
 
 Board.prototype.makeBoard = function(size){
@@ -23,6 +25,7 @@ Board.prototype.makeBoard = function(size){
         this.board.push(newTile);
     }
     this.size = size;
+    this.area = size * size;
 }
 
 Board.prototype.makeBombs  = function(numberOfBombs){
@@ -41,7 +44,6 @@ Board.prototype.makeBombs  = function(numberOfBombs){
 
 
 //return array of adjacent tiles numbers, some invalid
-
     Board.prototype.adjacentArray =  function(tileNumber){
         var size = parseInt(this.size);
         var numberPlaces = [];
@@ -57,12 +59,37 @@ Board.prototype.makeBombs  = function(numberOfBombs){
                 numberPlaces.push(tileNumber-1);
                 numberPlaces.push(tileNumber+size-1);
             }
-        console.log(numberPlaces);
-        return numberPlaces;
-    }
+            for(var i = 0; i < numberPlaces.length; i++){
+                if((numberPlaces[i] >= this.area) ||(numberPlaces[i] < 0)){
+                    numberPlaces.splice(i,1);
+                }
+            }
+            return numberPlaces;
+        };
+        // console.log(numberPlaces);
 
 
+    //changes tile # status to revealed: true as well as those for all others who have not been revealed. should reveal whole board
+    // Board.prototype.reveal = function(input){
+    //     var thisBoard = this.board;
+    //     var adjacentTiles = this.adjacentArray(input);
+    //     thisBoard[input-1].revealed = true;
+    //     adjacentTiles.forEach(function(number){
+    //         if(number < 0 ){
+    //             adjacentTiles.splice(adjacentTiles.indexOf(number));
+    //             console.log(adjacentTiles.indexOf(number));
+    //         }
+    //         else{
+    //             console.log("else ran");
+    //         }
+    //     })
+    //     console.log(adjacentTiles);
+    //
+    // }
 
+
+var newBoard = new Board();
+newBoard.makeBoard(4);
 
 
 $(function(){
@@ -70,13 +97,18 @@ $(function(){
         var newBoard = new Board();
         var inputSize = $("#input").val();
         newBoard.makeBoard(inputSize);
-        newBoard.makeBombs(1);
-        newBoard.board.forEach(function(i){
-            $(".board").append("<p class='square'> "+i.underside+" </p>");
-        });
-    });
-});
-///if a bomb exists, run this equation to add numbers to other places using array of coordinates
+        newBoard.makeBombs(5);
+        newBoard.board.forEach(function(tile){
+            var tile = tile;
+                $(".board").append("<p class='square'> </p>");
+                    $(".square").last().click(function(){
+                        $(this).addClass("red");
+                    })
+                });
+                });
+            });
+
+        ///if a bomb exists, run this equation to add numbers to other places using array of coordinates
 
 
 

@@ -1,9 +1,16 @@
 .square{
     display: inline-block;
     border: 1px solid black;
-    width: 50px;
-}
+    width: 50px!important;
+    height: 50px !important;
+    overflow: hidden;
+    text-align: center;
+    font-size: 2.1em;}
 
 .board{
     max-width: 300px;
+    margin-left: 300px;
+}
+.red{
+    background: red;
 }
