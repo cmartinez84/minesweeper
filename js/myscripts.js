@@ -42,11 +42,11 @@ Board.prototype.makeBombs  = function(numberOfBombs){
     }
     console.log(randNum);
     console.log(numbersAroundBombs);
-  };
+};//perfect
 
 //
 //return array of adjacent tiles numbers, some invalid
-    Board.prototype.adjacentArray =  function(tileNumber){
+Board.prototype.adjacentArray =  function(tileNumber){
         var tileNumber = tileNumber +1;
         var size = parseInt(this.size);
         var area = this.area;
@@ -69,22 +69,21 @@ Board.prototype.makeBombs  = function(numberOfBombs){
                     alteredPlaces.push(numberPlaces[i]-1);
                 }
         };
-        return alteredPlaces; //actualy tiles indexes works with display
+        return alteredPlaces; //actualy tiles indexes works with displayperfect
 }
 
     //changes tile # status to revealed: true as well as those for all others who have not been revealed. should reveal whole board
     Board.prototype.reveal = function(input){
-        var thisBoard = this; //an array
+        var board = this;
         var adjacentTiles = this.adjacentArray(input);
-        this.board[input-1].revealed = true;
-        console.log(adjacentTiles);
+        this.board[input].revealed = true;
         adjacentTiles.forEach(function(next){
-            if(thisBoard.board[next].revealed === false){
-                thisBoard.board[next].revealed = true;
-                thisBoard.reveal(input);
+            if((board.board[next].revealed === false)){
+                board.board[next].revealed = true;
+                board.reveal(next);
+                console.log(next + "revealed");
             }
             else{
-                console.log(thisBoard.board[next].revealed);
             }
         })
     }
