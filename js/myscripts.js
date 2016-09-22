@@ -9,7 +9,7 @@
 function Tile(i){
     this.underside = 0;
     this.index =i;
-    this.revealed ="false";
+    this.revealed = false;
     // this.adjacentBombs = 0;
 }
 function Board(){
@@ -19,32 +19,35 @@ function Board(){
 }
 
 Board.prototype.makeBoard = function(size){
-    var boardArea = size * size;
-    for(var i = 1; i <= boardArea; i++){
+    this.area = size * size;
+    this.size = size;
+    for(var i = 0; i < this.area; i++){
         var newTile = new Tile(i);
         this.board.push(newTile);
     }
-    this.size = size;
-    this.area = size * size;
 }
 
 Board.prototype.makeBombs  = function(numberOfBombs){
     //this will take a paramter in the future to determine how  many bombs are in a  game, ie difficulty
-    for(var i =1; i<=numberOfBombs; i++){
-        var randNum = Math.floor((Math.random() * this.board.length) + 1);
-        this.board[randNum-1].underside = "bomb";
+    for(var i =0; i< numberOfBombs; i++){
+        var randNum = Math.floor((Math.random() * this.area) + 1);
+        this.board[randNum].underside = "bomb";
         var numbersAroundBombs = this.adjacentArray(randNum);
          numbersAroundBombs.forEach(function(number){
-             if(number >=0 && number <=( this.size *this.size)){
-                this.board[number-1].underside += 1;
+             if(number >=0 && number <this.area){
+                this.board[number].underside += 1;
+                console.log(this.board[number].underside);
              }
-         }, this)
+         }, this);
     }
+    console.log(randNum);
+    console.log(numbersAroundBombs);
   };
 
-
+//
 //return array of adjacent tiles numbers, some invalid
     Board.prototype.adjacentArray =  function(tileNumber){
+        var tileNumber = tileNumber +1;
         var size = parseInt(this.size);
         var area = this.area;
         var numberPlaces = [];
@@ -63,33 +66,33 @@ Board.prototype.makeBombs  = function(numberOfBombs){
             }
             for(var i = 0; i < numberPlaces.length; i++){
                 if((numberPlaces[i] <= area) && (numberPlaces[i] > 0)){
-                    alteredPlaces.push(numberPlaces[i]);
+                    alteredPlaces.push(numberPlaces[i]-1);
                 }
         };
-        console.log(alteredPlaces);
+        return alteredPlaces; //actualy tiles indexes works with display
 }
 
     //changes tile # status to revealed: true as well as those for all others who have not been revealed. should reveal whole board
-    // Board.prototype.reveal = function(input){
-    //     var thisBoard = this.board;
-    //     var adjacentTiles = this.adjacentArray(input);
-    //     thisBoard[input-1].revealed = true;
-    //     adjacentTiles.forEach(function(number){
-    //         if(number < 0 ){
-    //             adjacentTiles.splice(adjacentTiles.indexOf(number));
-    //             console.log(adjacentTiles.indexOf(number));
-    //         }
-    //         else{
-    //             console.log("else ran");
-    //         }
-    //     })
-    //     console.log(adjacentTiles);
-    //
-    // }
+    Board.prototype.reveal = function(input){
+        var thisBoard = this; //an array
+        var adjacentTiles = this.adjacentArray(input);
+        this.board[input-1].revealed = true;
+        console.log(adjacentTiles);
+        adjacentTiles.forEach(function(next){
+            if(thisBoard.board[next].revealed === false){
+                thisBoard.board[next].revealed = true;
+                thisBoard.reveal(input);
+            }
+            else{
+                console.log(thisBoard.board[next].revealed);
+            }
+        })
+    }
 
 
 var newBoard = new Board();
-newBoard.makeBoard(4);
+newBoard.makeBoard(3);
+// newBoard.makeBombs(1);
 
 
 $(function(){
@@ -97,14 +100,24 @@ $(function(){
         var newBoard = new Board();
         var inputSize = $("#input").val();
         newBoard.makeBoard(inputSize);
-        newBoard.makeBombs(5);
-        newBoard.board.forEach(function(tile){
-            var tile = tile;
-                $(".board").append("<p class='square'> </p>");
-                    $(".square").last().click(function(){
-                        $(this).addClass("red");
-                    })
-                });
+        newBoard.makeBombs(1);
+        console.log(newBoard);
+        var drawboard = function(boardObject){
+            boardObject.board.forEach(function(tile){
+                var tile = tile;
+                    $(".board").append("<p class='square'> </p>");
+                        $(".square").last().click(function(){
+                            boardObject.reveal(tile.index);
+                            $(this).html(tile.revealed);
+                            drawboard(this);
+                        });
+                    });
+            }
+        drawboard(newBoard);
+        $(".board").click(function(){
+            $(this).empty();
+            drawboard(newBoard);
+        });
                 });
             });
 
