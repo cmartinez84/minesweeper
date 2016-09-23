@@ -23,6 +23,7 @@ Board.prototype.makeBoard = function(size){
     this.size = size;
     for(var i = 0; i < this.area; i++){
         var newTile = new Tile(i);
+        newTile.index = i;
         this.board.push(newTile);
     }
 }
@@ -34,14 +35,13 @@ Board.prototype.makeBombs  = function(numberOfBombs){
         this.board[randNum].underside = "bomb";
         var numbersAroundBombs = this.adjacentArray(randNum);
          numbersAroundBombs.forEach(function(number){
-             if(number >=0 && number <this.area){
+             if((number >=0 && number <this.area) &&this.board[number].underside !== "bomb"){
                 this.board[number].underside += 1;
-                console.log(this.board[number].underside);
              }
          }, this);
     }
-    console.log(randNum);
-    console.log(numbersAroundBombs);
+    // console.log(randNum);
+    // console.log(numbersAroundBombs);
 };//perfect
 
 //
@@ -73,52 +73,76 @@ Board.prototype.adjacentArray =  function(tileNumber){
 }
 
     //changes tile # status to revealed: true as well as those for all others who have not been revealed. should reveal whole board
-    Board.prototype.reveal = function(input){
-        var board = this;
-        var adjacentTiles = this.adjacentArray(input);
-        this.board[input].revealed = true;
+Board.prototype.reveal = function(input){
+    var board = this;
+    var adjacentTiles = this.adjacentArray(input);
+    this.board[input].revealed = true;
+    if(board.board[input].underside === 0){
         adjacentTiles.forEach(function(next){
             if((board.board[next].revealed === false)){
                 board.board[next].revealed = true;
-                board.reveal(next);
                 console.log(next + "revealed");
+            if((board.board[next].underside === 0)){
+                board.reveal(next);
+                console.log("i am running at " +next);
+                }
             }
-            else{
-            }
-        })
+        });
     }
+    return adjacentTiles;
+}//perfect, dont touch
 
-
-var newBoard = new Board();
-newBoard.makeBoard(3);
+// sample datat
+// var newBoard = new Board();
+// newBoard.makeBoard(3);
 // newBoard.makeBombs(1);
-
+Board.prototype.endGame = function(){
+    this.board.forEach(function(tile){
+        tile.revealed = true;
+        tile.underside = "bomb";
+    });
+}
 
 $(function(){
     $("button").click(function(){
         var newBoard = new Board();
         var inputSize = $("#input").val();
         newBoard.makeBoard(inputSize);
-        newBoard.makeBombs(1);
+        newBoard.makeBombs(18);
         console.log(newBoard);
         var drawboard = function(boardObject){
             boardObject.board.forEach(function(tile){
-                var tile = tile;
-                    $(".board").append("<p class='square'> </p>");
-                        $(".square").last().click(function(){
-                            boardObject.reveal(tile.index);
-                            $(this).html(tile.revealed);
-                            drawboard(this);
-                        });
-                    });
-            }
-        drawboard(newBoard);
-        $(".board").click(function(){
-            $(this).empty();
-            drawboard(newBoard);
-        });
+            var tile = tile;
+            if(tile.underside === "bomb"){
+                $(".board").append("<span id=tile"+tile.index+" class='square '><img class='bomb' src='img/bomb.png'></span>");
+                $("#tile"+tile.index).click(function(){
+                    newBoard.endGame();
+                    boardObject.board.forEach(function(newTile){
+                        if(newTile.revealed === true){
+                            // $("#tile"+newTile.index).addClass("red");
+                            $(".square").addClass("squareBomb");
+                        }
+                    })
                 });
-            });
+            }
+            else{
+            $(".board").append("<span id=tile"+tile.index+" class='square   color"+tile.underside+"'>"+tile.underside+"</span>");
+            $("#tile"+tile.index).click(function(){
+                $(this).addClass("red");
+                boardObject.reveal(tile.index);
+                boardObject.board.forEach(function(newTile){
+                    if(newTile.revealed === true){
+                        $("#tile"+newTile.index).addClass("red");
+                        console.log("revealed!!!!");
+                        }
+                    })
+                });
+            }
+        });
+    }
+        drawboard(newBoard);
+        });
+    });
 
         ///if a bomb exists, run this equation to add numbers to other places using array of coordinates
 
