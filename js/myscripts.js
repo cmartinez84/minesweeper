@@ -114,13 +114,14 @@ $(function(){
             boardObject.board.forEach(function(tile){
             var tile = tile;
             if(tile.underside === "bomb"){
-                $(".board").append("<span id=tile"+tile.index+" class='square '><img class='bomb' src='img/bomb2.png'></span>");
+                $(".board").append("<span id=tile"+tile.index+" class='square bombtile '></span>");
                 $("#tile"+tile.index).click(function(){
                     newBoard.endGame();
                     boardObject.board.forEach(function(newTile){
                         if(newTile.revealed === true){
                             // $("#tile"+newTile.index).addClass("red");
                             $(".square").addClass("squareBomb");
+                            $(".bombtile").html("<img class='bomb' src='img/bomb2.png'>");
                         }
                     })
                 });
