@@ -128,11 +128,14 @@ $(function(){
                 });
                 $("#tile"+tile.index).contextmenu(function(){
                     $(this).html("<img src='img/flag.png'>");
+                    tile.blocked.true;
                 });
             }
             else{
             $(".board").append("<span id=tile"+tile.index+" class='square color"+tile.underside+"'>"+" "+"</span>");
             $("#tile"+tile.index).click(function(){
+                if(tile.blocked === false){
+
                 $(this).addClass("red");
                 boardObject.reveal(tile.index);
                 boardObject.board.forEach(function(newTile){
@@ -140,10 +143,22 @@ $(function(){
                         $("#tile"+newTile.index).addClass("red");
                         $("#tile"+newTile.index).html(newTile.underside);
                         }
-                    })
+                    });
+                }
                 });
             $("#tile"+tile.index).contextmenu(function(){
-                $(this).html("<img src='img/flag.png'>");
+                if(tile.blocked ===false){
+                    $(this).html("<img src='img/flag.png'>");
+                    tile.blocked = true;
+                }
+                else{
+                    $(this).html(" ");
+                    tile.blocked = false;
+                }
+
+
+
+
             });
             }
         });
