@@ -10,6 +10,7 @@ function Tile(i){
     this.underside = 0;
     this.index =i;
     this.revealed = false;
+    this.blocked = false;
     // this.adjacentBombs = 0;
 }
 function Board(){
@@ -138,6 +139,9 @@ $(function(){
                         }
                     })
                 });
+            $("#tile"+tile.index).contextmenu(function(){
+                $(this).html("<img src='img/flag.png'>");
+            });
             }
         });
         $(".square").hover(function(){
@@ -145,9 +149,9 @@ $(function(){
             $(this).toggleClass("red");
 
         });
-        $(".square").contextmenu(function(){
-            $(this).html("<img src='img/flag.png'>");
-        });
+        // $(".square").contextmenu(function(){
+        //     $(this).html("<img src='img/flag.png'>");
+        // });
     }
 
     drawboard(newBoard);
