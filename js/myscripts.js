@@ -120,7 +120,7 @@ $(function(){
 
 
                 $("#tile"+tile.index).click(function(){
-                    if(tile.blocked === false){
+                    if(tile.blocked === false ){
                     newBoard.endGame();
                     boardObject.board.forEach(function(newTile){
                         if(newTile.revealed === true){
@@ -136,9 +136,13 @@ $(function(){
 
 
                 $("#tile"+tile.index).contextmenu(function(){
-                    if(tile.blocked ===false){
+                    if(tile.blocked === false){
                         $(this).html("<img src='img/flag.png'>");
-                        tile.blocked = true;
+                        tile.blocked = "flag";
+                    }
+                    else if(tile.blocked === "flag"){
+                        $(this).html("<img src='img/questionmark2.jpg'>");
+                        tile.blocked = "questionmark";
                     }
                     else{
                         $(this).html(" ");
@@ -146,10 +150,6 @@ $(function(){
                     }
                 });
 
-                // $("#tile"+tile.index).contextmenu(function(){
-                //     $(this).html("<img src='img/flag.png'>");
-                //     tile.blocked.true;
-                // });
             }
             else{
             $(".board").append("<span id=tile"+tile.index+" class='square color"+tile.underside+"'>"+" "+"</span>");
@@ -168,9 +168,13 @@ $(function(){
             });
             //handles left click flag
             $("#tile"+tile.index).contextmenu(function(){
-                if(tile.blocked ===false){
+                if(tile.blocked === false){
                     $(this).html("<img src='img/flag.png'>");
-                    tile.blocked = true;
+                    tile.blocked = "flag";
+                }
+                else if(tile.blocked === "flag"){
+                    $(this).html("<img src='img/questionmark2.jpg'>");
+                    tile.blocked = "questionmark";
                 }
                 else{
                     $(this).html(" ");
