@@ -114,7 +114,7 @@ $(function(){
             boardObject.board.forEach(function(tile){
             var tile = tile;
             if(tile.underside === "bomb"){
-                $(".board").append("<span id=tile"+tile.index+" class='square '><img class='bomb' src='img/bomb.png'></span>");
+                $(".board").append("<span id=tile"+tile.index+" class='square '><img class='bomb' src='img/bomb2.png'></span>");
                 $("#tile"+tile.index).click(function(){
                     newBoard.endGame();
                     boardObject.board.forEach(function(newTile){
@@ -126,14 +126,14 @@ $(function(){
                 });
             }
             else{
-            $(".board").append("<span id=tile"+tile.index+" class='square   color"+tile.underside+"'>"+tile.underside+"</span>");
+            $(".board").append("<span id=tile"+tile.index+" class='square color"+tile.underside+"'>"+" "+"</span>");
             $("#tile"+tile.index).click(function(){
                 $(this).addClass("red");
                 boardObject.reveal(tile.index);
                 boardObject.board.forEach(function(newTile){
                     if(newTile.revealed === true){
                         $("#tile"+newTile.index).addClass("red");
-                        console.log("revealed!!!!");
+                        $("#tile"+newTile.index).html(newTile.underside)
                         }
                     })
                 });
