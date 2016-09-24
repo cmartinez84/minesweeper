@@ -116,7 +116,11 @@ $(function(){
             var tile = tile;
             if(tile.underside === "bomb"){
                 $(".board").append("<span id=tile"+tile.index+" class='square bombtile '></span>");
+
+
+
                 $("#tile"+tile.index).click(function(){
+                    if(tile.blocked === false){
                     newBoard.endGame();
                     boardObject.board.forEach(function(newTile){
                         if(newTile.revealed === true){
@@ -124,12 +128,28 @@ $(function(){
                             $(".square").addClass("squareBomb");
                             $(".bombtile").html("<img class='bomb' src='img/bomb2.png'>");
                         }
-                    })
+                    });
+                    }
                 });
+
+
+
+
                 $("#tile"+tile.index).contextmenu(function(){
-                    $(this).html("<img src='img/flag.png'>");
-                    tile.blocked.true;
+                    if(tile.blocked ===false){
+                        $(this).html("<img src='img/flag.png'>");
+                        tile.blocked = true;
+                    }
+                    else{
+                        $(this).html(" ");
+                        tile.blocked = false;
+                    }
                 });
+
+                // $("#tile"+tile.index).contextmenu(function(){
+                //     $(this).html("<img src='img/flag.png'>");
+                //     tile.blocked.true;
+                // });
             }
             else{
             $(".board").append("<span id=tile"+tile.index+" class='square color"+tile.underside+"'>"+" "+"</span>");
@@ -145,7 +165,8 @@ $(function(){
                         }
                     });
                 }
-                });
+            });
+            //handles left click flag
             $("#tile"+tile.index).contextmenu(function(){
                 if(tile.blocked ===false){
                     $(this).html("<img src='img/flag.png'>");
@@ -155,11 +176,8 @@ $(function(){
                     $(this).html(" ");
                     tile.blocked = false;
                 }
-
-
-
-
             });
+
             }
         });
         $(".square").hover(function(){
