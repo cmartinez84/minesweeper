@@ -134,12 +134,16 @@ $(function(){
                 boardObject.board.forEach(function(newTile){
                     if(newTile.revealed === true){
                         $("#tile"+newTile.index).addClass("red");
-                        $("#tile"+newTile.index).html(newTile.underside)
+                        $("#tile"+newTile.index).html(newTile.underside);
                         }
                     })
                 });
             }
         });
+        $(".square").hover(function(){
+            $(this).toggleClass("pressed");
+            $(this).toggleClass("red");
+        })
     }
         drawboard(newBoard);
         });
