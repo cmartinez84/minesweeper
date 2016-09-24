@@ -126,6 +126,9 @@ $(function(){
                         }
                     })
                 });
+                $("#tile"+tile.index).contextmenu(function(){
+                    $(this).html("<img src='img/flag.png'>");
+                });
             }
             else{
             $(".board").append("<span id=tile"+tile.index+" class='square color"+tile.underside+"'>"+" "+"</span>");
