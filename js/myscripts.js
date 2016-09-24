@@ -120,7 +120,7 @@ $(function(){
 
 
                 $("#tile"+tile.index).click(function(){
-                    if(tile.blocked === false ){
+                    if(tile.blocked === false){
                     newBoard.endGame();
                     boardObject.board.forEach(function(newTile){
                         if(newTile.revealed === true){
@@ -136,15 +136,15 @@ $(function(){
 
 
                 $("#tile"+tile.index).contextmenu(function(){
-                    if(tile.blocked === false){
+                    if(tile.blocked === false && tile.revealed === false){
                         $(this).html("<img src='img/flag.png'>");
                         tile.blocked = "flag";
                     }
-                    else if(tile.blocked === "flag"){
+                    else if(tile.blocked === "flag" && tile.revealed === false){
                         $(this).html("<img src='img/questionmark2.jpg'>");
                         tile.blocked = "questionmark";
                     }
-                    else{
+                    else if(tile.revealed === false){
                         $(this).html(" ");
                         tile.blocked = false;
                     }
@@ -168,15 +168,15 @@ $(function(){
             });
             //handles left click flag
             $("#tile"+tile.index).contextmenu(function(){
-                if(tile.blocked === false){
+                if(tile.blocked === false && tile.revealed === false){
                     $(this).html("<img src='img/flag.png'>");
                     tile.blocked = "flag";
                 }
-                else if(tile.blocked === "flag"){
+                else if(tile.blocked === "flag" && tile.revealed === false){
                     $(this).html("<img src='img/questionmark2.jpg'>");
                     tile.blocked = "questionmark";
                 }
-                else{
+                else if(tile.revealed === false){
                     $(this).html(" ");
                     tile.blocked = false;
                 }
