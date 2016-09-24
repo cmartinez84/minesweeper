@@ -143,11 +143,16 @@ $(function(){
         $(".square").hover(function(){
             $(this).toggleClass("pressed");
             $(this).toggleClass("red");
-        })
-    }
-        drawboard(newBoard);
+
         });
+        $(".square").contextmenu(function(){
+            $(this).html("<img src='img/flag.png'>");
+        });
+    }
+
+    drawboard(newBoard);
     });
+});
 
         ///if a bomb exists, run this equation to add numbers to other places using array of coordinates
 
