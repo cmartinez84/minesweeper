@@ -105,68 +105,52 @@ Board.prototype.endGame = function(){
 }
 
 $(function(){
-    $("button").click(function(){
+    $("button#easy").click(function(){
         var newBoard = new Board();
-        var inputSize = $("#input").val();
-        newBoard.makeBoard(inputSize);
+        newBoard.makeBoard(11);
         newBoard.makeBombs(18);
         console.log(newBoard);
-        var drawboard = function(boardObject){
-            boardObject.board.forEach(function(tile){
-            var tile = tile;
-            if(tile.underside === "bomb"){
-                $(".board").append("<span id=tile"+tile.index+" class='square bombtile '></span>");
+        drawboard(newBoard);
+        $(".board").addClass("boardEasy");
+        $(".square").addClass("squareEasy");
+    });
+    $("button#medium").click(function(){
+        var newBoard = new Board();
+        newBoard.makeBoard(17);
+        newBoard.makeBombs(18);
+        console.log(newBoard);
+        drawboard(newBoard);
+        $(".board").addClass("boardMedium");
+        $(".square").addClass("squareEasy");
+    });
+    $("button#difficult").click(function(){
+        var newBoard = new Board();
+        newBoard.makeBoard(24);
+        newBoard.makeBombs(18);
+        console.log(newBoard);
+        drawboard(newBoard);
+        $(".board").addClass("boardDifficult");
+        $(".square").addClass("squareEasy");
+    });
+    var drawboard = function(boardObject){
+        boardObject.board.forEach(function(tile){
+        var tile = tile;
+        if(tile.underside === "bomb"){
+            $(".board").append("<span id=tile"+tile.index+" class='square bombtile '></span>");
 
-
-
-                $("#tile"+tile.index).click(function(){
-                    if(tile.blocked === false){
-                    newBoard.endGame();
-                    boardObject.board.forEach(function(newTile){
-                        if(newTile.revealed === true){
-                            // $("#tile"+newTile.index).addClass("red");
-                            $(".square").addClass("squareBomb");
-                            $(".bombtile").html("<img class='bomb' src='img/bomb2.png'>");
-                        }
-                    });
-                    }
-                });
-
-
-
-
-                $("#tile"+tile.index).contextmenu(function(){
-                    if(tile.blocked === false && tile.revealed === false){
-                        $(this).html("<img src='img/flag.png'>");
-                        tile.blocked = "flag";
-                    }
-                    else if(tile.blocked === "flag" && tile.revealed === false){
-                        $(this).html("<img src='img/questionmark2.jpg'>");
-                        tile.blocked = "questionmark";
-                    }
-                    else if(tile.revealed === false){
-                        $(this).html(" ");
-                        tile.blocked = false;
-                    }
-                });
-
-            }
-            else{
-            $(".board").append("<span id=tile"+tile.index+" class='square color"+tile.underside+"'>"+" "+"</span>");
             $("#tile"+tile.index).click(function(){
                 if(tile.blocked === false){
-
-                $(this).addClass("red");
-                boardObject.reveal(tile.index);
+                boardObject.endGame();
                 boardObject.board.forEach(function(newTile){
                     if(newTile.revealed === true){
-                        $("#tile"+newTile.index).addClass("red");
-                        $("#tile"+newTile.index).html(newTile.underside);
-                        }
-                    });
+                        // $("#tile"+newTile.index).addClass("red");
+                        $(".square").addClass("squareBomb");
+                        $(".bombtile").html("<img class='bomb' src='img/bomb2.png'>");
+                    }
+                });
                 }
             });
-            //handles left click flag
+
             $("#tile"+tile.index).contextmenu(function(){
                 if(tile.blocked === false && tile.revealed === false){
                     $(this).html("<img src='img/flag.png'>");
@@ -182,20 +166,53 @@ $(function(){
                 }
             });
 
+        }
+        else{
+        $(".board").append("<span id=tile"+tile.index+" class='square color"+tile.underside+"'>"+" "+"</span>");
+        $("#tile"+tile.index).click(function(){
+            if(tile.blocked === false){
+
+            $(this).addClass("red");
+            boardObject.reveal(tile.index);
+            boardObject.board.forEach(function(newTile){
+                if(newTile.revealed === true){
+                    $("#tile"+newTile.index).addClass("red");
+                    $("#tile"+newTile.index).html(newTile.underside);
+                    }
+                });
             }
         });
-        $(".square").hover(function(){
-            $(this).toggleClass("pressed");
-            $(this).toggleClass("red");
-
+        //handles left click flag
+        $("#tile"+tile.index).contextmenu(function(){
+            if(tile.blocked === false && tile.revealed === false){
+                $(this).html("<img src='img/flag.png'>");
+                tile.blocked = "flag";
+            }
+            else if(tile.blocked === "flag" && tile.revealed === false){
+                $(this).html("<img src='img/questionmark2.jpg'>");
+                tile.blocked = "questionmark";
+            }
+            else if(tile.revealed === false){
+                $(this).html(" ");
+                tile.blocked = false;
+            }
         });
-        // $(".square").contextmenu(function(){
-        //     $(this).html("<img src='img/flag.png'>");
-        // });
-    }
 
-    drawboard(newBoard);
+        }
     });
+    $(".square").hover(function(){
+        $(this).toggleClass("pressed");
+        $(this).toggleClass("red");
+    });
+}
+    // $("button").click(function(){
+    //     var newBoard = new Board();
+    //     var inputSize = $("#input").val();
+    //     newBoard.makeBoard(inputSize);
+    //     newBoard.makeBombs(18);
+    //     console.log(newBoard);
+    //     drawboard(newBoard);
+    // });
 });
 
         ///if a bomb exists, run this equation to add numbers to other places using array of coordinates
